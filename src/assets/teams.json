@@ -1,0 +1,32 @@
+[
+  {
+    "teamname": "Team1",
+    "members": [
+      {
+        "name": "Angelo Espiritu aa",
+        "code": "X6RgzCXb"
+      },
+      {
+        "name": "Maria Paz Vernal",
+        "code": "aPnRRTF8"
+      }
+    ]
+  },
+  {
+    "teamname": "Team2",
+    "members": [
+      {
+        "name": "Vijae Manlapaz",
+        "code": "AuBVwynK"
+      },
+      {
+        "name": "Arnel Nuqui",
+        "code": "jLZP5GMJ"
+      },
+      {
+        "name": "Roxxy Rafael",
+        "code": "jb5WqStj"
+      }
+    ]
+  }
+]

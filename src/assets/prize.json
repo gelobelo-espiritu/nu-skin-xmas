@@ -1,0 +1,4 @@
+[
+  { "teamname": "Team1", "prizes": [1000, 5000] },
+  { "teamname": "Team2", "prizes": [500, 1000, 5000] }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "teamname": "Team1",
+    "options": [
+      { "label": "#1", "value": "" },
+      { "label": "#2", "value": "" }
+    ]
+  },
+  {
+    "teamname": "Team2",
+    "options": [
+      { "label": "#1", "value": "" },
+      { "label": "#2", "value": "" },
+      { "label": "#3", "value": "" }
+    ]
+  }
+]
