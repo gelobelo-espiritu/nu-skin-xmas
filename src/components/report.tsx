@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  query,
+  onSnapshot,
+  where,
+} from "firebase/firestore";
 import { shuffle } from "lodash";
 
 import "./form.styles.scss";
@@ -112,6 +120,7 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
   const [teamName, setTeamName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [optionsArray, setOption] = useState<Array<Option>>([]);
+  const [members, setMembers] = useState<Array<Member>>([]);
   const [pending, setPendingMembers] = useState<Array<Member>>([]);
   const [raffleResultsArray, setRaffleResults] = useState<Array<RaffleResult>>(
     []
@@ -170,29 +179,52 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     []
   );
 
+  const q = query(collection(db, "selection"), where("teamname", "==", team));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "modified") {
+        const optionsData = (change.doc.data() as TeamOptions).options;
+        const pendingMembers = members.filter((memberObject) => {
+          return (
+            optionsData.find(
+              (optionObject) => optionObject.value === memberObject.name
+            ) === undefined
+          );
+        });
+        setPendingMembers(pendingMembers);
+        setOption(optionsData);
+      }
+    });
+  });
+
   useEffect(() => {
     async function fetchData() {
       setTeamName(team);
-      const members = await getTeamMembers(team);
+      const membersData = await getTeamMembers(team);
       const optionsData = await getTeamOptions(team);
       const raffleResults = await getTeamRaffleResults(team);
-      setRaffleOpen(members.isOpen);
-      const pendingMembers = members.member.filter((memberObject) => {
+      setRaffleOpen(membersData.isOpen);
+
+      const pendingMembers = membersData.member.filter((memberObject) => {
         return (
           optionsData.find(
             (optionObject) => optionObject.value === memberObject.name
           ) === undefined
         );
       });
-
+      setMembers(membersData.member);
       setPendingMembers(pendingMembers);
       setOption(optionsData);
-      setRaffleResults(raffleResults);
 
+      setRaffleResults(raffleResults);
       setLoading(false);
     }
 
     fetchData();
+    return () => {
+      console.log("unsubscribe");
+      unsubscribe();
+    };
   }, []);
 
   const submitClicked = async () => {
