@@ -156,6 +156,7 @@ const Form: React.FC<FormProps> = ({
   };
 
   const handleChange = async (selectedOption: unknown) => {
+    console.log(selectedOption);
     setShowError(false);
     const selected = selectedOption as Option;
     setSelectedOption(selected);
@@ -262,6 +263,7 @@ const Form: React.FC<FormProps> = ({
         </span>
         <Select
           placeholder="Select a number"
+          value={chosenOption}
           options={options}
           styles={selectStyles}
           onChange={handleChange}
