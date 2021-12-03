@@ -13,6 +13,7 @@ import db from "./db";
 // Import the functions you need from the SDKs you need
 
 import { TeamOptions, Option, Teams, Member, Prizes } from "./interfaces";
+
 /*
 const teamObject = teams as Array<Teams>;
 teamObject.forEach(async (obj) => {
