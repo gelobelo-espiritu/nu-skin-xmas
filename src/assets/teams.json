@@ -1,31 +1,465 @@
 [
   {
-    "teamname": "Team1",
+    "isOpen": false,
+    "teamname": "ERC",
     "members": [
       {
-        "name": "Angelo Espiritu aa",
-        "code": "X6RgzCXb"
+        "name": "Rose Famorca",
+        "code": "8t7Tsr"
       },
       {
-        "name": "Maria Paz Vernal",
-        "code": "aPnRRTF8"
+        "name": "Bryan Garilao",
+        "code": "HQvSY3"
+      },
+      {
+        "name": "Eric Redota",
+        "code": "U3pQcr"
+      },
+      {
+        "name": "Jenny Reyes",
+        "code": "Gs0CSZ"
+      },
+      {
+        "name": "May Aquino",
+        "code": "uS1nLz"
+      },
+      {
+        "name": "Paz Varnal",
+        "code": "Djkaib"
+      },
+      {
+        "name": "Ren Cortez",
+        "code": "iKLuEb"
+      },
+      {
+        "name": "Rommel Santos",
+        "code": "bP7rLC"
       }
     ]
   },
   {
-    "teamname": "Team2",
+    "isOpen": false,
+    "teamname": "AGELOC",
     "members": [
       {
-        "name": "Vijae Manlapaz",
-        "code": "AuBVwynK"
+        "name": "Zsannen Mariano",
+        "code": "VOUnti"
       },
       {
-        "name": "Arnel Nuqui",
-        "code": "jLZP5GMJ"
+        "name": "Anthony James Cu",
+        "code": "F921os"
+      },
+      {
+        "name": "Cherie Aguilar",
+        "code": "hw5w8U"
+      },
+      {
+        "name": "Eduard Gilyan D Angeklo San Juan II",
+        "code": "qNj1d5"
+      },
+      {
+        "name": "Gabrial Umali",
+        "code": "CP4WPA"
+      },
+      {
+        "name": "Genson Sumalinog",
+        "code": "MCX8rP"
+      },
+      {
+        "name": "Jhun Panlaqui Jr.",
+        "code": "O0QJDH"
+      },
+      {
+        "name": "Karlo Ciriacruz",
+        "code": "2Avyw9"
+      },
+      {
+        "name": "Kim Santillan",
+        "code": "Wy1W7f"
+      },
+      {
+        "name": "Marya Magno",
+        "code": "mACBPv"
+      },
+      {
+        "name": "Myla Castillo",
+        "code": "uX8O1E"
+      },
+      {
+        "name": "Ralph Diamond Laput",
+        "code": "AHg0m3"
       },
       {
         "name": "Roxxy Rafael",
-        "code": "jb5WqStj"
+        "code": "pBSCgP"
+      },
+      {
+        "name": "Sherwin Soriano",
+        "code": "PDYT8b"
+      },
+      {
+        "name": "Toby Rodin Roman",
+        "code": "5RuyWR"
+      }
+    ]
+  },
+  {
+    "isOpen": false,
+    "teamname": "LUMISPA",
+    "members": [
+      {
+        "name": "Bim Noya",
+        "code": "FYum9l"
+      },
+      {
+        "name": "Aki Tarala",
+        "code": "l2yK4x"
+      },
+      {
+        "name": "Allan San Andres",
+        "code": "8cpYTC"
+      },
+      {
+        "name": "Alyana Alvero",
+        "code": "kFU9YO"
+      },
+      {
+        "name": "Bon MAnalac",
+        "code": "MGbwVA"
+      },
+      {
+        "name": "Sharon Roque",
+        "code": "grk4Yh"
+      },
+      {
+        "name": "Jaydee Bacus",
+        "code": "kF89l8"
+      },
+      {
+        "name": "Mark Rivera",
+        "code": "3yVkpH"
+      },
+      {
+        "name": "Nicka Garcia",
+        "code": "VHISel"
+      },
+      {
+        "name": "Rey Cayetano",
+        "code": "xUwcNm"
+      },
+      {
+        "name": "Rom Losigues",
+        "code": "JSKoSk"
+      },
+      {
+        "name": "Harold Gaba",
+        "code": "d4SACt"
+      }
+    ]
+  },
+  {
+    "isOpen": false,
+    "teamname": "TRUPOWER",
+    "members": [
+      {
+        "name": "Robee Rose Arevalo",
+        "code": "K6SNoE"
+      },
+      {
+        "name": "Angelo Espiritu",
+        "code": "oVfyKU"
+      },
+      {
+        "name": "Celestine Cyrielle Kiok Kan",
+        "code": "7mB4lV"
+      },
+      {
+        "name": "Christopher Santos",
+        "code": "GJsH0d"
+      },
+      {
+        "name": "Danielene Mae Caberte",
+        "code": "agVzBC"
+      },
+      {
+        "name": "Manuel Lorenza Pereira",
+        "code": "VmK3ud"
+      },
+      {
+        "name": "Alson Fajardo",
+        "code": "jMv8lp"
+      },
+      {
+        "name": "Francis Vidal",
+        "code": "LM1PIn"
+      },
+      {
+        "name": "Joey Macatong",
+        "code": "BBjdhv"
+      },
+      {
+        "name": "Nino Rey Oliguer",
+        "code": "vURlxp"
+      },
+      {
+        "name": "Regie Jan Serbo",
+        "code": "87rxEw"
+      },
+      {
+        "name": "Sherwin Gaum",
+        "code": "BONIXm"
+      },
+      {
+        "name": "Vijae Manlapaz",
+        "code": "HSXYTb"
+      },
+      {
+        "name": "Katrina Ann Macalinta",
+        "code": "x09hMe"
+      },
+      {
+        "name": "Arnel C. Nuqui",
+        "code": "lli8k2"
+      }
+    ]
+  },
+  {
+    "isOpen": false,
+    "teamname": "EPOCH",
+    "members": [
+      {
+        "name": "Phoebe San Juan",
+        "code": "jwgDTH"
+      },
+      {
+        "name": "Cess Sabino",
+        "code": "z2EJRC"
+      },
+      {
+        "name": "Chen Chen Yarra",
+        "code": "7TbWuX"
+      },
+      {
+        "name": "Echo Bolanos",
+        "code": "kwiDD3"
+      },
+      {
+        "name": "James Bastillo",
+        "code": "B7Ak2U"
+      },
+      {
+        "name": "Joana Remoroza",
+        "code": "tJIlYw"
+      },
+      {
+        "name": "Jun Ibarbia",
+        "code": "PlUWzR"
+      },
+      {
+        "name": "Lanie Gapas",
+        "code": "faniPD"
+      },
+      {
+        "name": "Mhy Arevalo",
+        "code": "PPoqE9"
+      },
+      {
+        "name": "Pat Villena",
+        "code": "e7s00D"
+      },
+      {
+        "name": "Quenie Pablo",
+        "code": "ofX4jU"
+      },
+      {
+        "name": "Ryanna Misa",
+        "code": "uGztek"
+      },
+      {
+        "name": "Jolie Santos",
+        "code": "fpZopf"
+      }
+    ]
+  },
+  {
+    "isOpen": false,
+    "teamname": "SCION",
+    "members": [
+      {
+        "name": "Joyce Calangi",
+        "code": "1aZ8do"
+      },
+      {
+        "name": "Alex Cunanan",
+        "code": "a9I8Yz"
+      },
+      {
+        "name": "Apple Bacus",
+        "code": "z8CBQX"
+      },
+      {
+        "name": "Cherry Octaviano",
+        "code": "ZEUUpx"
+      },
+      {
+        "name": "Dex Sagabaen",
+        "code": "rZU0a0"
+      },
+      {
+        "name": "Gigi Galo",
+        "code": "9WixqG"
+      },
+      {
+        "name": "Ira Tiqui",
+        "code": "B2Oa9B"
+      },
+      {
+        "name": "JR Sosa",
+        "code": "Qz2mFp"
+      },
+      {
+        "name": "Jun Lucas",
+        "code": "6iVIii"
+      },
+      {
+        "name": "Lee Gutierrez",
+        "code": "3ksksf"
+      },
+      {
+        "name": "Micheal Bernardo",
+        "code": "cKc7J9"
+      },
+      {
+        "name": "Nino Javier",
+        "code": "2GVGjK"
+      },
+      {
+        "name": "Pearl Ramos",
+        "code": "Fmzmd3"
+      }
+    ]
+  },
+  {
+    "isOpen": false,
+    "teamname": "ECOSPERE",
+    "members": [
+      {
+        "name": "Gino Cleofas",
+        "code": "jToJ3h"
+      },
+      {
+        "name": "Algen Alcaraz",
+        "code": "VBgxjh"
+      },
+      {
+        "name": "Allan Mongaya",
+        "code": "Ffac7L"
+      },
+      {
+        "name": "ER R Fusilero",
+        "code": "JXJhoM"
+      },
+      {
+        "name": "Jaena Villena",
+        "code": "cVZAGk"
+      },
+      {
+        "name": "Jov Mateo",
+        "code": "Pvt5EV"
+      },
+      {
+        "name": "Lance Viola",
+        "code": "Ckf2qm"
+      },
+      {
+        "name": "Lynn Caro",
+        "code": "KRpPC6"
+      },
+      {
+        "name": "Mike Dalena",
+        "code": "zwk3GF"
+      },
+      {
+        "name": "Reyson Reyes",
+        "code": "RKqivp"
+      },
+      {
+        "name": "Robert Yarra",
+        "code": "pqJLAc"
+      },
+      {
+        "name": "Vern Sosa",
+        "code": "XrmTMc"
+      },
+      {
+        "name": "Paolo Aguenza",
+        "code": "WTgN9M"
+      }
+    ]
+  },
+  {
+    "isOpen": false,
+    "teamname": "FFG",
+    "members": [
+      {
+        "name": "Chester Allan Bondocan",
+        "code": "XNc5fI"
+      },
+      {
+        "name": "Abraham Baligod",
+        "code": "YtRiS4"
+      },
+      {
+        "name": "Allan Bryan Tiongson",
+        "code": "T3Q0ss"
+      },
+      {
+        "name": "Allan Ray Lorenzo",
+        "code": "Xc04B0"
+      },
+      {
+        "name": "Engelbert Roraldo",
+        "code": "FgVS93"
+      },
+      {
+        "name": "Izar Farinas",
+        "code": "OekJLO"
+      },
+      {
+        "name": "Jeffrey Tan",
+        "code": "mX9tZm"
+      },
+      {
+        "name": "Joemar San Jose",
+        "code": "kXMNkE"
+      },
+      {
+        "name": "Jonas Bryum Reyes",
+        "code": "ff8yx1"
+      },
+      {
+        "name": "Micheal Lawrence Luneza",
+        "code": "iMCFBs"
+      },
+      {
+        "name": "Michelle Therese  Terania",
+        "code": "PmH4mi"
+      },
+      {
+        "name": "Raziedo Tabasa",
+        "code": "vW1Q3t"
+      },
+      {
+        "name": "Rhein Isaac",
+        "code": "uCSl7A"
+      },
+      {
+        "name": "Ronnel Babatio",
+        "code": "G1aDUY"
+      },
+      {
+        "name": "Tony Faelga, Jr.",
+        "code": "zsNKpZ"
       }
     ]
   }

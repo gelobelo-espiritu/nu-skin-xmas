@@ -4,6 +4,7 @@ import Select, { StylesConfig } from "react-select";
 import "./form.styles.scss";
 import teams from "../assets/teams.json";
 import selection from "../assets/selection.json";
+import prizes from "../assets/prize.json";
 
 import NuSkinLogo from "../assets/nu-skin-logo.png";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -11,12 +12,12 @@ import db from "./db";
 
 // Import the functions you need from the SDKs you need
 
-import { TeamOptions, Option, Teams, Member } from "./interfaces";
-
+import { TeamOptions, Option, Teams, Member, Prizes } from "./interfaces";
 /*
 const teamObject = teams as Array<Teams>;
 teamObject.forEach(async (obj) => {
   await setDoc(doc(db, "teams", obj.teamname), {
+    isOpen: false,
     teamname: obj.teamname,
     members: obj.members,
   });
@@ -27,6 +28,15 @@ selectionObject.forEach(async (obj) => {
   await setDoc(doc(db, "selection", obj.teamname), {
     teamname: obj.teamname,
     options: obj.options,
+  });
+});
+
+
+const prizesObject = prizes as Array<Prizes>;
+prizesObject.forEach(async (obj) => {
+  await setDoc(doc(db, "prizes", obj.teamname), {
+    teamname: obj.teamname,
+    prizes: obj.prizes,
   });
 });
 */
