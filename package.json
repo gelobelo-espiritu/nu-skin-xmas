@@ -4,8 +4,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "serve": "vite preview",
-    "start": "vite preview"
+    "serve": "vite preview --port 80",
+    "start": "vite preview --port 80"
   },
   "dependencies": {
     "@types/lodash": "^4.14.176",
