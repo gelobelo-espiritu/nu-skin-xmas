@@ -7,13 +7,12 @@ import selection from "../assets/selection.json";
 import prizes from "../assets/prize.json";
 
 import NuSkinLogo from "../assets/nu-skin-logo.png";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, runTransaction, setDoc } from "firebase/firestore";
 import db from "./db";
 
 // Import the functions you need from the SDKs you need
 
 import { TeamOptions, Option, Teams, Member, Prizes } from "./interfaces";
-
 /*
 const teamObject = teams as Array<Teams>;
 teamObject.forEach(async (obj) => {
@@ -31,7 +30,6 @@ selectionObject.forEach(async (obj) => {
     options: obj.options,
   });
 });
-
 
 const prizesObject = prizes as Array<Prizes>;
 prizesObject.forEach(async (obj) => {
@@ -179,20 +177,36 @@ const Form: React.FC<FormProps> = ({
     }
     setShowError(false);
 
-    const options: Array<Option> = await getTeamOptions(team);
-    const isAvailable = checkOptionAvailable(chosenOption.label, options);
+    const docRef = doc(db, "selection", teamName);
 
-    if (isAvailable) {
-      const index = options.findIndex(
-        (optionData) => optionData.label == chosenOption.label
-      );
-      options[index] = { label: chosenOption.label, value: memberName };
-      await setDoc(doc(db, "selection", teamName), {
-        teamname: teamName,
-        options: options,
+    try {
+      const newSelection = await runTransaction(db, async (transaction) => {
+        const sfDoc = await transaction.get(docRef);
+        if (!sfDoc.exists()) {
+          throw "Document does not exist!";
+        }
+
+        const options = (sfDoc.data() as TeamOptions).options;
+        const isAvailable = checkOptionAvailable(chosenOption.label, options);
+
+        if (isAvailable) {
+          const index = options.findIndex(
+            (optionData) => optionData.label == chosenOption.label
+          );
+          options[index] = { label: chosenOption.label, value: memberName };
+
+          transaction.update(docRef, {
+            teamname: teamName,
+            options: options,
+          });
+          return options;
+        } else {
+          return Promise.reject("Sorry! Population is too big");
+        }
       });
+
       setChosenNumber(chosenOption.label);
-    } else {
+    } catch (e) {
       const optionsData = options.filter(
         (optionObject) => optionObject.value === ""
       );

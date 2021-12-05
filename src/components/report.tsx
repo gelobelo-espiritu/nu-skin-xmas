@@ -7,11 +7,14 @@ import {
   query,
   onSnapshot,
   where,
+  deleteDoc,
 } from "firebase/firestore";
 import { shuffle } from "lodash";
 
 import "./form.styles.scss";
 import prizes from "../assets/prize.json";
+import selection from "../assets/selection.json";
+import teams from "../assets/teams.json";
 
 import NuSkinLogo from "../assets/nu-skin-logo.png";
 import db from "./db";
@@ -253,6 +256,20 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     setRaffleOpen(true);
   };
 
+  const resetClicked = async () => {
+    const resetSelection = selection.find(
+      (optionObject) => optionObject.teamname === teamName
+    );
+
+    const resetTeam = teams.find(
+      (optionObject) => optionObject.teamname === teamName
+    );
+
+    await setDoc(doc(db, "selection", teamName), resetSelection);
+    await setDoc(doc(db, "teams", teamName), resetTeam);
+    await deleteDoc(doc(db, "results", teamName));
+  };
+
   const FormHeader = () => {
     const result = raffleResultsArray.length > 0 ? " Results" : "";
     return (
@@ -274,18 +291,20 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
 
     return (
       <div className="report">
-        {pending.length > 0 && (
-          <>
-            <TableContainer
-              columns={isOpen ? columnsPending : columnsWaiting}
-              data={pending}
-            />
-            <br />
-          </>
-        )}
-        {isOpen && (
-          <TableContainer columns={columnsSelection} data={optionsArray} />
-        )}
+        <div className="tableContainer">
+          {pending.length > 0 && (
+            <>
+              <TableContainer
+                columns={isOpen ? columnsPending : columnsWaiting}
+                data={pending}
+              />
+              <br />
+            </>
+          )}
+          {isOpen && (
+            <TableContainer columns={columnsSelection} data={optionsArray} />
+          )}
+        </div>
         {pending.length === 0 && (
           <div className="button" onClick={submitClicked}>
             Submit
@@ -297,6 +316,9 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
             Open Raffle
           </div>
         )}
+        <div className="button" onClick={resetClicked}>
+          Reset
+        </div>
       </div>
     );
   };
