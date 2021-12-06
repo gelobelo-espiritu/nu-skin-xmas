@@ -285,6 +285,9 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
       return (
         <div className="report">
           <TableContainer columns={columnsRaffle} data={raffleResultsArray} />
+          <div className="button" onClick={resetClicked}>
+            Reset
+          </div>
         </div>
       );
     }
