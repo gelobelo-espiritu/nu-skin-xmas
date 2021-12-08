@@ -7,7 +7,16 @@ import selection from "../assets/selection.json";
 import prizes from "../assets/prize.json";
 
 import NuSkinLogo from "../assets/nu-skin-logo.png";
-import { doc, getDoc, runTransaction, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  runTransaction,
+  setDoc,
+  query,
+  collection,
+  onSnapshot,
+  where,
+} from "firebase/firestore";
 import db from "./db";
 
 // Import the functions you need from the SDKs you need
@@ -124,6 +133,16 @@ const Form: React.FC<FormProps> = ({
   );
   const [isOpen, setRaffleOpen] = useState<boolean>(false);
 
+  const q = query(collection(db, "teams"), where("teamname", "==", team));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "modified") {
+        const isOpen = (change.doc.data() as Teams).isOpen;
+        setRaffleOpen(isOpen);
+      }
+    });
+  });
+
   useEffect(() => {
     async function fetchData() {
       setTeamName(team);
@@ -150,6 +169,10 @@ const Form: React.FC<FormProps> = ({
     }
 
     fetchData();
+    return () => {
+      console.log("unsubscribe");
+      unsubscribe();
+    };
   }, []);
 
   const userNotFound: boolean = memberName === "";
@@ -201,7 +224,7 @@ const Form: React.FC<FormProps> = ({
           });
           return options;
         } else {
-          return Promise.reject("Sorry! Population is too big");
+          throw Error("Option not available");
         }
       });
 

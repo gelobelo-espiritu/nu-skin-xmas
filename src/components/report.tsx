@@ -268,6 +268,7 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     await setDoc(doc(db, "selection", teamName), resetSelection);
     await setDoc(doc(db, "teams", teamName), resetTeam);
     await deleteDoc(doc(db, "results", teamName));
+    setRaffleResults([]);
     setRaffleOpen(false);
   };
 
