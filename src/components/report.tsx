@@ -83,7 +83,15 @@ const getTeamRaffleResults = async (
   }
 };
 
-const TableContainer = ({ columns, data }: { columns: any; data: any }) => {
+const TableContainer = ({
+  columns,
+  data,
+  hasMargin = false,
+}: {
+  columns: any;
+  data: any;
+  hasMargin: boolean;
+}) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,
@@ -93,7 +101,11 @@ const TableContainer = ({ columns, data }: { columns: any; data: any }) => {
   return (
     // If you're curious what props we get as a result of calling our getter functions (getTableProps(), getRowProps())
     // Feel free to use console.log()  This will help you better understand how react table works underhood.
-    <table {...getTableProps()} className="styled-table">
+    <table
+      {...getTableProps()}
+      className="styled-table"
+      style={{ marginLeft: hasMargin ? 25 : 0 }}
+    >
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
@@ -326,6 +338,7 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
           {pending.length > 0 && (
             <>
               <TableContainer
+                hasMargin={false}
                 columns={isOpen ? columnsPending : columnsWaiting}
                 data={pending}
               />
@@ -333,7 +346,11 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
             </>
           )}
           {isOpen && (
-            <TableContainer columns={columnsSelection} data={optionsArray} />
+            <TableContainer
+              columns={columnsSelection}
+              data={optionsArray}
+              hasMargin
+            />
           )}
         </div>
         {pending.length === 0 && (
