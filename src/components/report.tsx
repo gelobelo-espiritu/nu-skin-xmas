@@ -29,6 +29,7 @@ import {
   RaffleResult,
   Teams,
   Prizes,
+  ModifiedRaffleResults,
 } from "./interfaces";
 
 type ReportProps = {
@@ -125,9 +126,9 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
   const [optionsArray, setOption] = useState<Array<Option>>([]);
   const [members, setMembers] = useState<Array<Member>>([]);
   const [pending, setPendingMembers] = useState<Array<Member>>([]);
-  const [raffleResultsArray, setRaffleResults] = useState<Array<RaffleResult>>(
-    []
-  );
+  const [raffleResultsArray, setRaffleResults] = useState<
+    Array<ModifiedRaffleResults>
+  >([]);
   const [isOpen, setRaffleOpen] = useState<boolean>(false);
 
   const columnsPending = useMemo(
@@ -200,6 +201,10 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     });
   });
 
+  const numberWithCommas = (x: number) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   useEffect(() => {
     async function fetchData() {
       setTeamName(team);
@@ -219,7 +224,20 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
       setPendingMembers(pendingMembers);
       setOption(optionsData);
 
-      setRaffleResults(raffleResults);
+      if (raffleResults.length > 0) {
+        const raffResults: Array<ModifiedRaffleResults> = raffleResults.map(
+          (result) => {
+            return {
+              name: result.name,
+              option: result.option,
+              prize: numberWithCommas(result.prize),
+            };
+          }
+        );
+        setRaffleResults(raffResults);
+      } else {
+        setRaffleResults([]);
+      }
       setLoading(false);
     }
 
@@ -242,7 +260,15 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     );
 
     await setDoc(doc(db, "results", teamName), { results: raffleResults });
-    setRaffleResults(raffleResults);
+    const modifiedRaffleResult: Array<ModifiedRaffleResults> =
+      raffleResults.map((result) => {
+        return {
+          name: result.name,
+          option: result.option,
+          prize: numberWithCommas(result.prize),
+        };
+      });
+    setRaffleResults(modifiedRaffleResult);
   };
 
   const openRaffle = async () => {

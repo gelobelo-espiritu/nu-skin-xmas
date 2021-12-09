@@ -30,6 +30,12 @@ export interface RaffleResult {
   prize: number;
 }
 
+export interface ModifiedRaffleResults {
+  name: string;
+  option: string;
+  prize: string;
+}
+
 export interface TotalResults {
   results: Array<RaffleResult>;
 }
