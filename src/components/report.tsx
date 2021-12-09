@@ -203,10 +203,12 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     const q = query(collection(db, "selection"), where("teamname", "==", team));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       console.log("SUBSCRIBED");
-      snapshot.docChanges().forEach((change) => {
+      snapshot.docChanges().forEach(async (change) => {
         if (change.type === "modified") {
+          const membersData = await getTeamMembers(team);
+
           const optionsData = (change.doc.data() as TeamOptions).options;
-          const pendingMembers = members.filter((memberObject) => {
+          const pendingMembers = membersData.member.filter((memberObject) => {
             return (
               optionsData.find(
                 (optionObject) => optionObject.value === memberObject.name
