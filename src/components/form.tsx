@@ -136,6 +136,7 @@ const Form: React.FC<FormProps> = ({
   useEffect(() => {
     const q = query(collection(db, "teams"), where("teamname", "==", team));
     const unsubscribe = onSnapshot(q, (snapshot) => {
+      console.log("SUBSCRIBED");
       snapshot.docChanges().forEach((change) => {
         if (change.type === "modified") {
           const isOpen = (change.doc.data() as Teams).isOpen;
@@ -169,7 +170,7 @@ const Form: React.FC<FormProps> = ({
 
     fetchData();
     return () => {
-      console.log("unsubscribe");
+      console.log("UNSUBSCRIBED");
       unsubscribe();
     };
   }, []);
