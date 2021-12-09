@@ -324,7 +324,11 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     if (raffleResultsArray.length > 0) {
       return (
         <div className="report">
-          <TableContainer columns={columnsRaffle} data={raffleResultsArray} />
+          <TableContainer
+            hasMargin={false}
+            columns={columnsRaffle}
+            data={raffleResultsArray}
+          />
           <div className="button" onClick={resetClicked}>
             Reset
           </div>
