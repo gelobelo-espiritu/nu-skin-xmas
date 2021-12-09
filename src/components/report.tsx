@@ -346,14 +346,13 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
                 columns={isOpen ? columnsPending : columnsWaiting}
                 data={pending}
               />
-              <br />
             </>
           )}
           {isOpen && (
             <TableContainer
               columns={columnsSelection}
               data={optionsArray}
-              hasMargin
+              hasMargin={pending.length > 0 ? true : false}
             />
           )}
         </div>
