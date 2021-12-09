@@ -222,20 +222,19 @@ const Form: React.FC<FormProps> = ({
             teamname: teamName,
             options: options,
           });
+
+          setChosenNumber(chosenOption.label);
           return options;
         } else {
-          throw Error("Option not available");
+          const optionsData = options.filter(
+            (optionObject) => optionObject.value === ""
+          );
+          setOptions(optionsData);
+          setShowError(true);
+          return options;
         }
       });
-
-      setChosenNumber(chosenOption.label);
-    } catch (e) {
-      const optionsData = options.filter(
-        (optionObject) => optionObject.value === ""
-      );
-      setOptions(optionsData);
-      setShowError(true);
-    }
+    } catch (e) {}
   };
 
   const FormHeader = () => {
@@ -265,7 +264,7 @@ const Form: React.FC<FormProps> = ({
         >{`Hello ${memberName}!`}</span>
         <span
           style={{ color: "#fff9d1", fontSize: 20, marginTop: 20 }}
-        >{`You have already chosen ${chosenNumber}!`}</span>
+        >{`You have chosen ${chosenNumber}!`}</span>
       </div>
     );
   };
@@ -329,7 +328,7 @@ const Form: React.FC<FormProps> = ({
               whiteSpace: "pre-wrap",
             }}
           >
-            {showError && `Selected number already\nnot available!`}
+            {showError && `Selected number not available!`}
           </span>
         }
       </div>

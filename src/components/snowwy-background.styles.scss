@@ -8,106 +8,43 @@
   overflow: hidden;
 }
 
-.snow {
-  border-radius: 50%;
-  opacity: 0.8;
+$particleSize: 20vmin;
+$animationDuration: 6s;
+$amount: 20;
+.bokeh {
+  width: $particleSize;
+  height: $particleSize;
+  border-radius: $particleSize;
+  backface-visibility: hidden;
   position: absolute;
-  top: -100vh;
-  animation-name: fall;
+  animation-name: move;
+  animation-duration: $animationDuration;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  $colors: (#583c87, #e45a84, #ffacac);
+  @for $i from 1 through $amount {
+    &:nth-child(#{$i}) {
+      color: nth($colors, random(length($colors)));
+      top: random(100) * 1%;
+      left: random(100) * 1%;
+      animation-duration: (random($animationDuration * 10) / 10) * 1s + 10s;
+      animation-delay: random(($animationDuration + 10s) * 10) / 10 * -1s;
+      transform-origin: (random(50) - 25) * 1vw (random(50) - 25) * 1vh;
+      $blurRadius: (random() + 0.5) * $particleSize * 0.5;
+      $x: if(random() > 0.5, -1, 1);
+      box-shadow: ($particleSize * 2 * $x) 0 $blurRadius currentColor;
+    }
+  }
 }
-@keyframes fall {
+
+@keyframes move {
   100% {
-    transform: translateY(200vh);
+    transform: translate3d(0, 0, 1px) rotate(360deg);
   }
-}
-
-$s1: "";
-$s2: "";
-$s3: "";
-@for $i from 1 through 150 {
-  $s1: $s1 +
-    random(1000) *
-    0.1vw +
-    " " +
-    random(1000) *
-    0.1vh +
-    " " +
-    0 +
-    " " +
-    random(50) *
-    -0.01rem +
-    #fff;
-  $s2: $s2 +
-    random(1000) *
-    0.1vw +
-    " " +
-    random(1000) *
-    0.1vh +
-    " " +
-    0 +
-    " " +
-    random(50) *
-    -0.01rem +
-    #fff;
-  $s3: $s3 +
-    random(1000) *
-    0.1vw +
-    " " +
-    random(1000) *
-    0.1vh +
-    " " +
-    0 +
-    " " +
-    random(50) *
-    -0.01rem +
-    #fff;
-  @if $i < 150 {
-    $s1: $s1 + ",";
-    $s2: $s2 + ",";
-    $s3: $s3 + ",";
-  }
-}
-.layer1 {
-  width: 1rem;
-  height: 1rem;
-  filter: blur(1.5px);
-  box-shadow: #{$s1};
-  animation-duration: 10s;
-  overflow: hidden;
-}
-.layer1.a {
-  animation-delay: -5s;
-}
-
-.layer2 {
-  width: 0.8rem;
-  height: 0.8rem;
-  filter: blur(3px);
-  box-shadow: #{$s2};
-  animation-duration: 12s;
-  overflow: hidden;
-}
-.layer2.a {
-  animation-delay: -6s;
-}
-
-.layer3 {
-  width: 0.6rem;
-  height: 0.6rem;
-  filter: blur(6px);
-  box-shadow: #{$s3};
-  animation-duration: 14s;
-  overflow: hidden;
-}
-.layer3.a {
-  animation-delay: -7s;
 }
 
 .snowwy-village {
-  background-image: url("../assets/snowwy-village.png");
-
+  background-image: url("../assets/nu_skin_xmas.png");
   height: 100%;
   width: 100%;
   background-position: left bottom; /*Positioning*/
