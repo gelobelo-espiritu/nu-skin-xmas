@@ -195,29 +195,29 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     []
   );
 
-  const q = query(collection(db, "selection"), where("teamname", "==", team));
-  const unsubscribe = onSnapshot(q, (snapshot) => {
-    snapshot.docChanges().forEach((change) => {
-      if (change.type === "modified") {
-        const optionsData = (change.doc.data() as TeamOptions).options;
-        const pendingMembers = members.filter((memberObject) => {
-          return (
-            optionsData.find(
-              (optionObject) => optionObject.value === memberObject.name
-            ) === undefined
-          );
-        });
-        setPendingMembers(pendingMembers);
-        setOption(optionsData);
-      }
-    });
-  });
-
   const numberWithCommas = (x: number) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   useEffect(() => {
+    const q = query(collection(db, "selection"), where("teamname", "==", team));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      console.log("SUBSCRIBED");
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "modified") {
+          const optionsData = (change.doc.data() as TeamOptions).options;
+          const pendingMembers = members.filter((memberObject) => {
+            return (
+              optionsData.find(
+                (optionObject) => optionObject.value === memberObject.name
+              ) === undefined
+            );
+          });
+          setPendingMembers(pendingMembers);
+          setOption(optionsData);
+        }
+      });
+    });
     async function fetchData() {
       setTeamName(team);
       const membersData = await getTeamMembers(team);
@@ -255,7 +255,7 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
 
     fetchData();
     return () => {
-      console.log("unsubscribe");
+      console.log("UNSUBSCRIBED");
       unsubscribe();
     };
   }, []);

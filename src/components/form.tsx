@@ -133,17 +133,16 @@ const Form: React.FC<FormProps> = ({
   );
   const [isOpen, setRaffleOpen] = useState<boolean>(false);
 
-  const q = query(collection(db, "teams"), where("teamname", "==", team));
-  const unsubscribe = onSnapshot(q, (snapshot) => {
-    snapshot.docChanges().forEach((change) => {
-      if (change.type === "modified") {
-        const isOpen = (change.doc.data() as Teams).isOpen;
-        setRaffleOpen(isOpen);
-      }
-    });
-  });
-
   useEffect(() => {
+    const q = query(collection(db, "teams"), where("teamname", "==", team));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "modified") {
+          const isOpen = (change.doc.data() as Teams).isOpen;
+          setRaffleOpen(isOpen);
+        }
+      });
+    });
     async function fetchData() {
       setTeamName(team);
       const members = await getTeamMembers(team);
