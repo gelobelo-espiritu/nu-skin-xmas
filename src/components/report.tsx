@@ -123,7 +123,7 @@ const TableContainer = ({
       <tbody {...getTableBodyProps()}>
         {rows.map((row) => {
           prepareRow(row);
-          console.log("GELOBELO ROW");
+
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map((cell) => {
@@ -408,9 +408,6 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
   };
 
   const setMemberStatus = async (status: string, code: string) => {
-    console.log("GELOBELO STATUS ", status);
-    console.log("GELOBELO STATUS ", code);
-
     const docRef = doc(db, "teams", teamName);
 
     try {
