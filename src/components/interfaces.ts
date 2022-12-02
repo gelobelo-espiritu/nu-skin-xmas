@@ -16,6 +16,7 @@ export interface TeamOptions {
 export interface Member {
   name: string;
   code: string;
+  status: string;
 }
 
 export interface Teams {

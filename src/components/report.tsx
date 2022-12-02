@@ -8,8 +8,9 @@ import {
   onSnapshot,
   where,
   deleteDoc,
+  runTransaction,
 } from "firebase/firestore";
-import { shuffle } from "lodash";
+import { shuffle, sortBy } from "lodash";
 
 import "./form.styles.scss";
 import prizes from "../assets/prize.json";
@@ -19,7 +20,6 @@ import teams from "../assets/teams.json";
 import NuSkinLogo from "../assets/nu-skin-logo.png";
 import db from "./db";
 
-// Import the functions you need from the SDKs you need
 import { useTable } from "react-table";
 import {
   Option,
@@ -35,6 +35,8 @@ import {
 type ReportProps = {
   team: string;
 };
+
+const LOWEST_PRIZE = 5000;
 
 const getTeamOptions = async (team: string): Promise<Array<Option>> => {
   const selectionRef = doc(db, "selection", team);
@@ -87,10 +89,12 @@ const TableContainer = ({
   columns,
   data,
   hasMargin = false,
+  onUpdateStatus,
 }: {
   columns: any;
   data: any;
   hasMargin: boolean;
+  onUpdateStatus?: (status: string, code: string) => void;
 }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
@@ -119,10 +123,51 @@ const TableContainer = ({
       <tbody {...getTableBodyProps()}>
         {rows.map((row) => {
           prepareRow(row);
+          console.log("GELOBELO ROW");
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map((cell) => {
-                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                if (
+                  cell.column.Header === "Action" &&
+                  row.values.status === "present"
+                ) {
+                  return (
+                    <td>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onUpdateStatus?.(row.values.status, row.values.name);
+                        }}
+                      >
+                        TAG ABSENT
+                      </button>
+                    </td>
+                  );
+                } else if (
+                  cell.column.Header === "Action" &&
+                  row.values.status === "absent"
+                ) {
+                  return (
+                    <td>
+                      &nbsp; &nbsp; &nbsp;
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onUpdateStatus?.(row.values.status, row.values.name);
+                        }}
+                      >
+                        TAG PRESENT
+                      </button>
+                    </td>
+                  );
+                }
+                return (
+                  <td {...cell.getCellProps()}>
+                    {cell.column.Header === "Status"
+                      ? cell.value.toUpperCase()
+                      : cell.render("Cell")}
+                  </td>
+                );
               })}
             </tr>
           );
@@ -136,7 +181,7 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
   const [teamName, setTeamName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [optionsArray, setOption] = useState<Array<Option>>([]);
-  const [members, setMembers] = useState<Array<Member>>([]);
+  const [teamMembers, setTeamMembers] = useState<Array<Member>>([]);
   const [pending, setPendingMembers] = useState<Array<Member>>([]);
   const [raffleResultsArray, setRaffleResults] = useState<
     Array<ModifiedRaffleResults>
@@ -149,6 +194,14 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
         Header: "Pending Members",
         accessor: "name",
       },
+      {
+        Header: "Status",
+        accessor: "status",
+      },
+      {
+        Header: "Action",
+        accessor: "",
+      },
     ],
     []
   );
@@ -158,6 +211,14 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
       {
         Header: "Team Members",
         accessor: "name",
+      },
+      {
+        Header: "Status",
+        accessor: "status",
+      },
+      {
+        Header: "Action",
+        accessor: "",
       },
     ],
     []
@@ -202,7 +263,7 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
   useEffect(() => {
     const q = query(collection(db, "selection"), where("teamname", "==", team));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      console.log("SUBSCRIBED");
+      console.log("SUBSCRIBED SELECTION");
       snapshot.docChanges().forEach(async (change) => {
         if (change.type === "modified") {
           const membersData = await getTeamMembers(team);
@@ -215,8 +276,31 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
               ) === undefined
             );
           });
+          setTeamMembers(membersData.member);
           setPendingMembers(pendingMembers);
           setOption(optionsData);
+        }
+      });
+    });
+
+    const x = query(collection(db, "teams"), where("teamname", "==", team));
+
+    const unsubscribeTeam = onSnapshot(x, (snapshot) => {
+      console.log("SUBSCRIBED TEAM");
+      snapshot.docChanges().forEach(async (change) => {
+        if (change.type === "modified") {
+          const optionsData = await getTeamOptions(team);
+          const modifiedTeam = change.doc.data() as Teams;
+          const pendingMembers = modifiedTeam.members.filter((memberObject) => {
+            return (
+              optionsData.find(
+                (optionObject) => optionObject.value === memberObject.name
+              ) === undefined
+            );
+          });
+
+          setTeamMembers(modifiedTeam.members);
+          setPendingMembers(pendingMembers);
         }
       });
     });
@@ -234,8 +318,9 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
           ) === undefined
         );
       });
-      setMembers(membersData.member);
+
       setPendingMembers(pendingMembers);
+      setTeamMembers(membersData.member);
       setOption(optionsData);
 
       if (raffleResults.length > 0) {
@@ -259,23 +344,49 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     return () => {
       console.log("UNSUBSCRIBED");
       unsubscribe();
+      unsubscribeTeam();
     };
   }, []);
 
+  const absentMembersCount = teamMembers.filter(
+    (member) => member.status === "absent"
+  ).length;
+
+  const doneMembersCount = optionsArray.filter(
+    (opt) => opt.value !== ""
+  ).length;
+
   const submitClicked = async () => {
     const prizes = await getTeamPrizes(teamName);
-    const shuffledPrizes = shuffle(prizes);
+
+    const sortedPrizes = sortBy(prizes);
+    if (absentMembersCount > 0) {
+      sortedPrizes.splice(0, absentMembersCount);
+    }
+
+    const shuffledPrizes = shuffle(sortedPrizes);
+    const filteredOptionArray = optionsArray.filter((op) => op.value !== "");
 
     const raffleResults: Array<RaffleResult> = shuffledPrizes.map(
       (prize, index) => {
-        const selected = optionsArray[index];
+        const selected = filteredOptionArray[index];
         return { name: selected.value, option: selected.label, prize };
       }
     );
 
-    await setDoc(doc(db, "results", teamName), { results: raffleResults });
+    const absentMemberPrizes: Array<RaffleResult> = teamMembers
+      .filter((member) => member.status === "absent")
+      .map((absentee) => {
+        return { name: absentee.name, option: "-", prize: LOWEST_PRIZE };
+      });
+
+    const combinedRaffleResults = raffleResults.concat(absentMemberPrizes);
+
+    await setDoc(doc(db, "results", teamName), {
+      results: combinedRaffleResults,
+    });
     const modifiedRaffleResult: Array<ModifiedRaffleResults> =
-      raffleResults.map((result) => {
+      combinedRaffleResults.map((result) => {
         return {
           name: result.name,
           option: result.option,
@@ -294,6 +405,42 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     };
     await setDoc(doc(db, "teams", teamName), teamUpdate);
     setRaffleOpen(true);
+  };
+
+  const setMemberStatus = async (status: string, code: string) => {
+    console.log("GELOBELO STATUS ", status);
+    console.log("GELOBELO STATUS ", code);
+
+    const docRef = doc(db, "teams", teamName);
+
+    try {
+      const newSelection = await runTransaction(db, async (transaction) => {
+        const sfDoc = await transaction.get(docRef);
+        if (!sfDoc.exists()) {
+          throw "Document does not exist!";
+        }
+
+        const teamData = sfDoc.data() as Teams;
+        const members = teamData.members;
+
+        const index = members.findIndex((member) => member.name === code);
+
+        const updateMember = members[index];
+        members[index] = {
+          name: updateMember.name,
+          code: updateMember.code,
+          status: status === "present" ? "absent" : "present",
+        };
+
+        transaction.update(docRef, {
+          members,
+          teamname: teamData.teamname,
+          isOpen: teamData.isOpen,
+        });
+      });
+    } catch (e) {
+      console.log("GELOBELO ", e);
+    }
   };
 
   const resetClicked = async () => {
@@ -322,6 +469,10 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
     );
   };
 
+  const submitWillShow =
+    pending.length === 0 ||
+    absentMembersCount + doneMembersCount === teamMembers.length;
+
   const Content = () => {
     if (raffleResultsArray.length > 0) {
       return (
@@ -347,6 +498,7 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
                 hasMargin={false}
                 columns={isOpen ? columnsPending : columnsWaiting}
                 data={pending}
+                onUpdateStatus={setMemberStatus}
               />
             </>
           )}
@@ -358,7 +510,7 @@ const Report: React.FC<ReportProps> = ({ team }: { team: string }) => {
             />
           )}
         </div>
-        {pending.length === 0 && (
+        {submitWillShow && (
           <div className="button" onClick={submitClicked}>
             Submit
           </div>

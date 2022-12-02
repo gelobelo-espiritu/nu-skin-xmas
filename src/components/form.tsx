@@ -19,10 +19,10 @@ import {
 } from "firebase/firestore";
 import db from "./db";
 
-// Import the functions you need from the SDKs you need
-
 import { TeamOptions, Option, Teams, Member, Prizes } from "./interfaces";
+
 /*
+
 const teamObject = teams as Array<Teams>;
 teamObject.forEach(async (obj) => {
   await setDoc(doc(db, "teams", obj.teamname), {
@@ -47,6 +47,7 @@ prizesObject.forEach(async (obj) => {
     prizes: obj.prizes,
   });
 });
+
 */
 
 const selectStyles: StylesConfig = {
@@ -124,6 +125,7 @@ const Form: React.FC<FormProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [showError, setShowError] = useState<boolean>(false);
   const [memberName, setMemberName] = useState<string>("");
+  const [memberStatus, setMemberStatus] = useState<string>("");
   const [options, setOptions] = useState<Array<Option>>([]);
   const [chosenOption, setSelectedOption] = useState<Option | undefined>(
     undefined
@@ -139,7 +141,12 @@ const Form: React.FC<FormProps> = ({
       console.log("SUBSCRIBED");
       snapshot.docChanges().forEach((change) => {
         if (change.type === "modified") {
-          const isOpen = (change.doc.data() as Teams).isOpen;
+          const teamData = change.doc.data() as Teams;
+          const isOpen = teamData.isOpen;
+          const status =
+            teamData.members.find((memberObject) => memberObject.code === code)
+              ?.status ?? "";
+          setMemberStatus(status);
           setRaffleOpen(isOpen);
         }
       });
@@ -155,7 +162,11 @@ const Form: React.FC<FormProps> = ({
       const name =
         members.member.find((memberObject) => memberObject.code === code)
           ?.name ?? "";
+      const status =
+        members.member.find((memberObject) => memberObject.code === code)
+          ?.status ?? "";
       setMemberName(name);
+      setMemberStatus(status);
 
       const optionsData = options.filter(
         (optionObject) => optionObject.value === ""
@@ -256,6 +267,16 @@ const Form: React.FC<FormProps> = ({
     );
   };
 
+  const TaggedAbsent = () => {
+    return (
+      <div className="content">
+        <span
+          style={{ color: "#fff9d1", fontSize: 30 }}
+        >{`Sorry you are tagged absent!`}</span>
+      </div>
+    );
+  };
+
   const UserAlreadyChosen = () => {
     return (
       <div className="content">
@@ -288,6 +309,9 @@ const Form: React.FC<FormProps> = ({
   };
 
   const Content = () => {
+    if (memberStatus === "absent") {
+      return <TaggedAbsent />;
+    }
     if (userNotFound === true) {
       return <UserNotFoundView />;
     }
